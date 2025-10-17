@@ -34,47 +34,6 @@
 <div id="plot"></div>
 
 <script>
-// === Calculate SKA antenna statistics ===
-
-// (Adjust these arrays if you use different categories)
-const skaTotal = skaPoints.length;
-const paleCount = skaPoints.filter(p => paleGreen.includes(p.Name)).length;
-const darkerCount = skaPoints.filter(p => darkerGreen.includes(p.Name)).length;
-const darkCount = skaPoints.filter(p => darkGreen.includes(p.Name)).length;
-
-// === Helper: draw a tiny marker in HTML that matches Plotly ===
-function markerHTML(color, shape) {
-  let symbol;
-  switch (shape) {
-    case "circle": symbol = "50%"; break;
-    case "square": symbol = "0%"; break;
-    case "hexagon": symbol = "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)"; break;
-    default: symbol = "50%";
-  }
-  return `
-    <div style="
-      display:inline-block;
-      width:14px;
-      height:14px;
-      background:${color};
-      clip-path:${symbol};
-      margin-right:6px;
-      vertical-align:middle;
-    "></div>
-  `;
-}
-
-// === Format percentages ===
-const toPct = (count) => ((count / skaTotal) * 100).toFixed(1) + "%";
-
-// === Inject content ===
-document.getElementById("stats").innerHTML = `
-  <b>SKA Antenna Foundations</b><br>
-  ${markerHTML("#b6e7a6", "circle")} Not started: ${skaTotal - paleCount - darkerCount - darkCount}<br>
-  ${markerHTML("#8bd08b", "circle")} Piling complete: ${paleCount} (${toPct(paleCount)})<br>
-  ${markerHTML("#4ba64f", "circle")} Foundation casted: ${darkerCount} (${toPct(darkerCount)})<br>
-  ${markerHTML("#006400", "circle")} Platform complete: ${darkCount} (${toPct(darkCount)})
-`;
 
   
 // CSV data (your same dataset)
@@ -413,6 +372,48 @@ const icons = telescopePoints.map(p => ({
 }));
 
 Plotly.relayout('plot', { images: icons });
+
+  // === Calculate SKA antenna statistics ===
+
+// (Adjust these arrays if you use different categories)
+const skaTotal = skaPoints.length;
+const paleCount = skaPoints.filter(p => paleGreen.includes(p.Name)).length;
+const darkerCount = skaPoints.filter(p => darkerGreen.includes(p.Name)).length;
+const darkCount = skaPoints.filter(p => darkGreen.includes(p.Name)).length;
+
+// === Helper: draw a tiny marker in HTML that matches Plotly ===
+function markerHTML(color, shape) {
+  let symbol;
+  switch (shape) {
+    case "circle": symbol = "50%"; break;
+    case "square": symbol = "0%"; break;
+    case "hexagon": symbol = "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)"; break;
+    default: symbol = "50%";
+  }
+  return `
+    <div style="
+      display:inline-block;
+      width:14px;
+      height:14px;
+      background:${color};
+      clip-path:${symbol};
+      margin-right:6px;
+      vertical-align:middle;
+    "></div>
+  `;
+}
+
+// === Format percentages ===
+const toPct = (count) => ((count / skaTotal) * 100).toFixed(1) + "%";
+
+// === Inject content ===
+document.getElementById("stats").innerHTML = `
+  <b>SKA Antenna Foundations</b><br>
+  ${markerHTML("#b6e7a6", "circle")} Not started: ${skaTotal - paleCount - darkerCount - darkCount}<br>
+  ${markerHTML("#8bd08b", "circle")} Piling complete: ${paleCount} (${toPct(paleCount)})<br>
+  ${markerHTML("#4ba64f", "circle")} Foundation casted: ${darkerCount} (${toPct(darkerCount)})<br>
+  ${markerHTML("#006400", "circle")} Platform complete: ${darkCount} (${toPct(darkCount)})
+`;
 
 </script>
 </body>

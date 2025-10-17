@@ -15,9 +15,68 @@
   </style>
 </head>
 <body>
+  <div id="stats" style="
+  position:absolute;
+  top:10px;
+  right:10px;
+  background:rgba(255,255,255,0.95);
+  padding:10px 14px;
+  border-radius:10px;
+  font-family:sans-serif;
+  font-size:14px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.25);
+  z-index:10;
+  max-width:240px;
+">
+  <!-- Filled dynamically with JS -->
+</div>
+  
 <div id="plot"></div>
 
 <script>
+// === Calculate SKA antenna statistics ===
+
+// (Adjust these arrays if you use different categories)
+const skaTotal = skaPoints.length;
+const paleCount = skaPoints.filter(p => paleGreen.includes(p.Name)).length;
+const darkerCount = skaPoints.filter(p => darkerGreen.includes(p.Name)).length;
+const darkCount = skaPoints.filter(p => darkGreen.includes(p.Name)).length;
+
+// === Helper: draw a tiny marker in HTML that matches Plotly ===
+function markerHTML(color, shape) {
+  let symbol;
+  switch (shape) {
+    case "circle": symbol = "50%"; break;
+    case "square": symbol = "0%"; break;
+    case "hexagon": symbol = "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)"; break;
+    default: symbol = "50%";
+  }
+  return `
+    <div style="
+      display:inline-block;
+      width:14px;
+      height:14px;
+      background:${color};
+      clip-path:${symbol};
+      margin-right:6px;
+      vertical-align:middle;
+    "></div>
+  `;
+}
+
+// === Format percentages ===
+const toPct = (count) => ((count / skaTotal) * 100).toFixed(1) + "%";
+
+// === Inject content ===
+document.getElementById("stats").innerHTML = `
+  <b>SKA Antenna Foundations</b><br>
+  ${markerHTML("#b6e7a6", "circle")} Not started: ${skaTotal - paleCount - darkerCount - darkCount}<br>
+  ${markerHTML("#8bd08b", "circle")} Piling complete: ${paleCount} (${toPct(paleCount)})<br>
+  ${markerHTML("#4ba64f", "circle")} Foundation casted: ${darkerCount} (${toPct(darkerCount)})<br>
+  ${markerHTML("#006400", "circle")} Platform complete: ${darkCount} (${toPct(darkCount)})
+`;
+
+  
 // CSV data (your same dataset)
 const csvData = `Name,E,N
 M000,112.76579059948781,-79.170785650142

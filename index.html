@@ -290,9 +290,21 @@ for(let v = -kmRange*1000; v <= kmRange*1000; v += tickStep) {
 
 // Layout
 const layout = {
-  title: "SKA Antenna Status Map",
+  title: {
+  text: "SKA Antenna Status Map",
+  font: {
+    family: "Arial, Helvetica, sans-serif",  // clean modern font
+    size: 28,                                // bigger
+    color: "#222"                             // dark and clear
+  },
+  xref: 'paper',
+  x: 0.5,                                     // center
+  xanchor: 'center',
+  yanchor: 'top',
+  pad: { t: 20, b: 10 }                       // some spacing above and below
+},
   xaxis: {
-    title: "Easting (km)",
+    title: "X (km)",
     scaleanchor: "y",
     scaleratio: 1,
     range: [-100000, 100000],
@@ -302,7 +314,7 @@ const layout = {
     zeroline: false
   },
   yaxis: {
-    title: "Northing (km)",
+    title: "Y (km)",
     range: [-100000, 100000],
     tickvals: tickVals,
     ticktext: tickTexts,
